@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    text-align: center;
+    background-color:rgb(211, 211, 211)
+  }
+
+h1 {
+
+    background-color: rgb(204, 53, 53);;
+    padding: 10px;
+}
+
+.board-container{
+
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+    border: 5px solid black;
+    padding: 30px;
+    background-color: rgb(204, 53, 53);
+    column-gap: 10px;
+    row-gap: 10px;
+}
+
+.cell{
+
+    border: 1px solid black;
+    padding: 50px;
+    background-color:rgb(211, 211, 211);
+}
