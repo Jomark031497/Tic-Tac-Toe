@@ -1,103 +1,121 @@
 
 const createPlayer = (name, sprite) => {
 
-    const moveHistory = [];
-
+    let moveHistory = [];
     return { name, sprite, moveHistory };
-
 };
+
 
 const Game = () => {
 
-    const gameBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; //the gameboard in array form
-    const gameContainer = document.querySelector('.board-container'); //reference to the board-container tag
+    let turnCount = 0;
+    let gameBoard = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let currentPlayer;
+    let currentSprite;
     let player1;
     let player2;
-    let currentPlayer;
-    let turnCount = 0;
 
-    const renderBoard = () => {    //A function which will render the contents of the gameboard
+    //references
+    let boardContainer = document.querySelector(".board-container");
+    let playerContainer = document.querySelector(".players");
 
-        gameContainer.innerHTML = "";
-        for (let x = 1; x < gameBoard.length; x++) {
 
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.textContent = gameBoard[x];
+    const checkWin = () => {
+
+        //const sortMoves = moveHistory.sort((a, b) => a - b);
+
+        if(gameBoard[0] === currentSprite && gameBoard[1] === currentSprite && gameBoard[2] === currentSprite){
+            console.log("WIN!");
+        }
+
+        if(gameBoard[3] === currentSprite && gameBoard[4] === currentSprite && gameBoard[5] === currentSprite){
+            console.log("WIN!");
+        }
+
+        if(gameBoard[6] === currentSprite && gameBoard[7] === currentSprite && gameBoard[8] === currentSprite){
+            console.log("WIN!");
+        }
+
+    }
+
+  
+    const getMove = (player, move) => {
+
+        let moveToInt = parseInt(move);
+        player.moveHistory.push(moveToInt);
+        let moveIndex = gameBoard.indexOf(moveToInt);
+        gameBoard.splice(moveIndex, 1, player.sprite);
+
+        checkWin();
+        gameTurn();
+
+    };
+
+    //Create the gameboard
+    const renderBoard = () => {
+
+        boardContainer.innerHTML = "";
+        for (i in gameBoard) {
+
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.textContent = gameBoard[i];
             cell.addEventListener("click", function (e) {
 
                 let move = e.target.innerText;
                 getMove(currentPlayer, move);
             });
 
-            gameContainer.appendChild(cell);
+            boardContainer.appendChild(cell);
+        }
 
-        };
     };
 
 
-
-    const getMove = (player, move) => {
-
-        player.moveHistory.push(move);
-
-        let index = gameBoard.indexOf(parseInt(move));
-        gameBoard.splice(parseInt(index), 1, player.sprite);
-        currentPlayer.moveHistory.sort((a, b) => a - b);
-        gameTurn();
-    }
-
-
+    //a function who will determine whos the current player
     const gameTurn = () => {
 
         renderBoard();
         turnCount++;
         currentPlayer = turnCount % 2 == 1 ? player1 : player2;
-        currentPlayer.moveHistory.sort((a, b) => a - b);
-        checkVictory(player1.moveHistory);
-        checkVictory(player2.moveHistory);
-        console.log(`current player: ${currentPlayer.name}`);
-        console.log(`sorted history: ${currentPlayer.moveHistory}`);
-
-    };
-
-    const checkVictory = (player) => {
-
-        let winningCombinations = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
-        [1, 4, 7], [1, 5, 9], [2, 5, 8], [3, 6, 9], [3, 5, 7]];
-
-
-        for (let i = 0; i < winningCombinations.length; i++) {
-
-            if (player.includes(winningCombinations[i][i])) {
-                console.log("okay");
-                if (player.includes(winningCombinations[i][i + 1])) {
-                    console.log("okay");
-                    if (player.includes(winningCombinations[i][i + 2])) {
-
-                        console.log("exit");
-                    }
-                }
-
-            }
-        };
+        currentSprite = currentPlayer.sprite;
+        console.log(currentSprite);
 
 
     };
 
-    const getPlayerNames = (() => {  //Get the names of the players and create instance of player
 
-        let p1name = prompt("Enter Name (X)");
-        let p2name = prompt("Enter name (O)");
-        player1 = createPlayer(p1name, "X");
-        player2 = createPlayer(p2name, "O");
+    //Get the Names of the player
+    const getPlayerNames = (() => {
+
+        let p1Name = prompt("Enter Name (X)");
+        let p2Name = prompt("Enter Name (O)");
+
+
+        //create instances of player 1 and 2
+        player1 = createPlayer(p1Name, "X");
+        player2 = createPlayer(p2Name, "O");
+
+        let p1Display = document.createElement("div");
+        p1Display.classList.add("player");
+        p1Display.textContent = `${p1Name}`;
+
+        let p2Display = document.createElement("div");
+        p2Display.classList.add("player");
+        p2Display.textContent = `${p2Name}`;
+
+
+        playerContainer.appendChild(p1Display);
+        playerContainer.appendChild(p2Display);
 
         gameTurn();
 
     })();
 
+
+
+
+
 };
-
-
 
 Game();
