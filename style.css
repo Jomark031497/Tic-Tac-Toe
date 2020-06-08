@@ -24,6 +24,16 @@ h1 {
 .cell{
 
     border: 1px solid black;
-    padding: 50px;
+    padding: 40px;
     background-color:rgb(211, 211, 211);
 }
+
+.cell:hover {
+    background-color: rgb(194, 194, 194);
+}
+
+.cell:active important {
+    background-color: black;
+    color: white;
+}
+
